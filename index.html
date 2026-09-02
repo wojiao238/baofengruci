@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天青寻窑火 · 青春传汝韵｜宝丰汝瓷三下乡</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft Yahei",sans-serif;}
+        :root{
+            --tianqing:#7393A7;
+            --dark-blue:#3A506B;
+            --light-blue:#E6EDF2;
+            --text:#2D3742;
+            --white:#ffffff;
+            --tag-chip:#b8cbd8;
+            --tag-site:#94b4c7;
+        }
+        nav{
+            background:var(--dark-blue);
+            padding:0 20px;
+            position:sticky;
+            top:0;
+            z-index:99;
+        }
+        .nav-wrap{
+            max-width:1200px;
+            margin:0 auto;
+            display:flex;
+            flex-wrap:wrap;
+        }
+        nav a{
+            color:var(--white);
+            text-decoration:none;
+            padding:16px 18px;
+            display:block;
+            transition:0.3s;
+        }
+        nav a:hover{background:var(--tianqing);}
+        .banner{
+            height:420px;
+            background:linear-gradient(rgba(58, 80, 107, 0.55),rgba(58, 80, 107, 0.55)), url("images/hengfu_tupian.jpg") center/cover no-repeat;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            color:white;
+        }
+        .banner h1{font-size:38px;margin-bottom:12px;letter-spacing:4px;}
+        .banner p{font-size:18px;margin-bottom:24px;}
+        .banner button{
+            padding:10px 26px;
+            border:none;
+            background:var(--tianqing);
+            color:#fff;
+            border-radius:30px;
+            font-size:16px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .banner button:hover{background:#5c7b8e;}
+        .container{
+            max-width:1200px;
+            margin:0 auto;
+            padding:48px 20px;
+        }
+        section{margin-bottom:64px;}
+        section h2{
+            text-align:center;
+            font-size:28px;
+            color:var(--dark-blue);
+            margin-bottom:32px;
+            padding-bottom:10px;
+            border-bottom:2px solid var(--tianqing);
+        }
+        .row{display:flex;gap:30px;flex-wrap:wrap;}
+        .col-2{flex:1;min-width:320px;}
+        img{
+            width:100%;
+            border-radius:10px;
+            box-shadow:0 3px 10px rgba(115,147,167,0.18);
+            cursor:zoom-in;
+        }
+        .card-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+        .card{
+            background:var(--light-blue);
+            padding:26px;
+            border-radius:12px;
+            border-left:5px solid var(--tianqing);
+            transition:0.3s;
+        }
+        .card:hover{
+            transform:translateY(-4px);
+            box-shadow:0 6px 14px rgba(115,147,167,0.22);
+        }
+        .card h3{margin-bottom:12px;color:var(--dark-blue);}
+        footer{
+            background:var(--dark-blue);
+            color:#fff;
+            text-align:center;
+            padding:28px;
+        }
+        p{
+            line-height:1.7;
+            color:var(--text);
+        }
+        /*数字化展品专区*/
+        .filter-bar{
+            display:flex;
+            gap:12px;
+            justify-content:center;
+            margin-bottom:28px;
+            flex-wrap:wrap;
+        }
+        .filter-btn{
+            border:2px solid var(--tianqing);
+            background:#fff;
+            color:var(--dark-blue);
+            padding:7px 18px;
+            border-radius:24px;
+            cursor:pointer;
+            transition:0.3s;
+            font-size:15px;
+        }
+        .filter-btn.active{
+            background:var(--tianqing);
+            color:#fff;
+        }
+        .exhibit-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+            gap:28px;
+        }
+        .exhibit-item{
+            background:#fff;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 2px 12px rgba(115,147,167,0.15);
+            transition:0.3s;
+        }
+        .exhibit-item:hover{
+            transform:translateY(-5px);
+            box-shadow:0 8px 18px rgba(115,147,167,0.25);
+        }
+        .exhibit-info{
+            padding:16px;
+        }
+        .exhibit-tag{
+            display:inline-block;
+            font-size:12px;
+            padding:3px 10px;
+            border-radius:20px;
+            margin-bottom:8px;
+            color:#222;
+        }
+        .tag-chip{background:var(--tag-chip);}
+        .tag-site{background:var(--tag-site);}
+        .exhibit-info h4{
+            color:var(--dark-blue);
+            margin-bottom:6px;
+            font-size:17px;
+        }
+        .exhibit-info p{
+            font-size:14px;
+            color:#555;
+        }
+        /*大图弹窗*/
+        .lightbox{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.85);
+            z-index:999;
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+        }
+        .lightbox-img{
+            max-width:90%;
+            max-height:90vh;
+            border-radius:6px;
+        }
+        .lightbox-close{
+            position:absolute;
+            top:20px;
+            right:30px;
+            color:#fff;
+            font-size:36px;
+            cursor:pointer;
+            user-select:none;
+        }
+    </style>
+</head>
+<body>
+<div class="lightbox" id="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-img" id="lightboxImg">
+</div>
+
+<nav>
+    <div class="nav-wrap">
+        <a href="#home">首页</a>
+        <a href="#overview">实践概况</a>
+        <a href="#record">调研纪实</a>
+        <a href="#result">调研成果</a>
+        <a href="#idea">创意方案</a>
+        <a href="#reflection">感悟总结</a>
+        <a href="#digital">数字化展品</a>
+    </div>
+</nav>
+
+<div class="banner" id="home">
+    <h1>天青寻窑火，青春传汝韵</h1>
+    <p>平顶山宝丰县汝瓷非遗调研 · 三下乡社会实践</p>
+    <button onclick="document.getElementById('overview').scrollIntoView()">查看详情</button>
+</div>
+
+<div class="container">
+    <section id="overview">
+        <h2>实践概况</h2>
+        <h3 style="color:var(--dark-blue);margin-bottom:10px;">实践背景</h3>
+        <p>汝瓷位列宋代五大名窑之首，宝丰县清凉寺是北宋汝官窑遗址所在地。本次三下乡实践，团队走进宝丰县，走访汝瓷博物馆与古窑遗址，实地记录汝瓷文物遗存，探究非遗传承与乡村文旅发展路径。</p>
+        <br>
+        <h3 style="color:var(--dark-blue);margin-bottom:10px;">实践信息</h3>
+        <p>实践地点：平顶山市宝丰县<br>调研地点：宝丰汝瓷博物馆、清凉寺汝官窑遗址<br>实践形式：实地走访、影像采集、资料整理</p>
+        <br>
+        <h3 style="color:var(--dark-blue);margin-bottom:10px;">实践路线</h3>
+        <p>团队从校园出发，前往平顶山市宝丰县，首先到达宝丰汝瓷博物馆，通过参观展厅、观察瓷片标本和考古展板，了解汝瓷历史与工艺特征。随后前往清凉寺汝官窑遗址，实地考察古窑炉、作坊基址、灰坑等遗存，记录遗址保护现状与文旅展示情况。</p>
+    </section>
+
+    <section id="record">
+        <h2>调研纪实</h2>
+        <div class="row">
+            <div class="col-2">
+                <img src="images/bowuguan_nei.jpg" alt="汝瓷博物馆实拍">
+                <h3 style="margin:14px 0;color:var(--dark-blue);">宝丰汝瓷博物馆参观</h3>
+                <p>团队参观汝瓷博物馆，近距离观察馆藏汝瓷残件，记录天青釉色、开片、香灰胎、芝麻支钉等典型汝窑特征，收集大量文物实拍素材。</p>
+            </div>
+            <div class="col-2">
+                <img src="images/yizhi_qingliangsi.jpg" alt="清凉寺汝官窑遗址">
+                <h3 style="margin:14px 0;color:var(--dark-blue);">清凉寺汝官窑遗址考察</h3>
+                <p>实地走访汝官窑遗址保护区域，观察古窑炉、作坊、灰坑等考古遗迹，了解宋代官窑烧造环境与生产流程。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="result">
+        <h2>调研成果</h2>
+        <div class="card-wrap">
+            <div class="card">
+                <h3>影像素材库</h3>
+                <p>采集博物馆瓷片标本、遗址遗迹实拍照片，建立数字化展品素材库。</p>
+            </div>
+            <div class="card">
+                <h3>现状观察总结</h3>
+                <p>结合实地参观，梳理汝瓷遗址保护现状、文旅宣传的优势与不足。</p>
+            </div>
+            <div class="card">
+                <h3>传承发展思考</h3>
+                <p>思考数字化展示、青年宣传等方式，助力汝瓷非遗传播。</p>
+            </div>
+            <div class="card">
+                <h3>实践育人收获</h3>
+                <p>队员实地感悟传统文化，提升社会实践与文化调研能力。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="idea">
+        <h2>创意方案</h2>
+        <div class="row">
+            <div class="col-2">
+                <h3 style="color:var(--dark-blue);margin-bottom:10px;">①线上数字化展示</h3>
+                <p>利用网页形式，将实地拍摄文物照片线上展出，打破地域限制，让更多人看见汝瓷遗存。</p>
+                <br>
+                <h3 style="color:var(--dark-blue);margin-bottom:10px;">②科普短视频构思</h3>
+                <p>依托博物馆、遗址实拍素材，制作简短科普短视频，面向青年群体科普汝瓷知识。</p>
+            </div>
+            <div class="col-2">
+                <h3 style="color:var(--dark-blue);margin-bottom:10px;">③文旅宣传建议</h3>
+                <p>结合遗址博物馆资源，建议面向学生群体打造研学路线，普及汝瓷历史文化。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="reflection">
+        <h2>感悟总结</h2>
+        <div class="row">
+            <div class="col-2">
+                <h3 style="color:var(--dark-blue);margin-bottom:10px;">团队感悟</h3>
+                <p>走进宝丰，直面千年汝瓷遗存，我们真切感受到宋代官窑的工艺魅力。文物不止陈列在博物馆，遗址也诉说着古代工匠的故事。青年应当主动关注地方非遗，用镜头和互联网讲好本土文化故事。</p>
+            </div>
+            <div class="col-2">
+                <h3 style="color:var(--dark-blue);margin-bottom:10px;">实践收获</h3>
+                <p>本次实践虽然以参观博物馆、遗址为主，但通过大量影像采集，完成实物资料收集，为后续文化传播打下基础。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="digital">
+        <h2>数字化展品库</h2>
+        <p style="text-align:center;margin-bottom:24px;">本次实践实拍馆藏瓷片标本与窑址遗存，线上数字化陈列</p>
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="chip">瓷片标本</button>
+            <button class="filter-btn" data-filter="site">窑址遗存</button>
+        </div>
+        <div class="exhibit-grid">
+            <!--瓷片标本25个-->
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_01.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>三彩刻划花卉纹腰圆形枕</h4>
+                    <p>北宋晚期清凉寺汝官窑遗址出土，枕面刻划缠枝花卉，黄绿彩釉搭配自然，是宋代三彩瓷枕典型实物。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_02.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>黄绿釉狗俑</h4>
+                    <p>北宋晚期遗址出土，一黄一绿双狗造型，小巧生动，是宋代世俗小动物雕塑的代表性遗存。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_03.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>三彩印花束腰枕</h4>
+                    <p>北宋晚期出土，束腰器型、模印花卉纹样，三彩釉色斑驳雅致，是宋代实用瓷枕完整遗存。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_04.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金元时期多品类瓷片组</h4>
+                    <p>集合钧釉、白地黑花、三彩等残件，直观展现金元时期清凉寺窑多品类、多元化的制瓷风貌。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_05.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>两彩卧狮俑</h4>
+                    <p>北宋中期遗址出土，狮子趴卧姿态，两彩釉装饰，造型憨态，是宋代小型陈设陶塑精品。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_06.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代黄釉狗俑</h4>
+                    <p>金代出土黄釉小狗塑像，整体趴卧造型，釉面温润古朴，是金代民间陶塑玩具代表性遗存。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_07.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代青釉瓷熏炉</h4>
+                    <p>金代青釉熏炉残件，炉盖带镂空出香孔，形制精巧，还原金代焚香陈设用器样貌。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_08.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>元代青釉莲花瓷炉</h4>
+                    <p>元代清凉寺遗址出土，器身塑莲瓣纹样，青釉温润典雅，是元代祭祀焚香类器物遗存。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_09.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋坠形支烧窑具</h4>
+                    <p>北宋晚期汝窑专用支烧工具，用于器物悬空烧制，是汝窑芝麻支钉工艺的直接实物证据。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_10.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋漏斗形匣钵</h4>
+                    <p>北宋晚期标准窑具，漏斗形制可隔离窑火烟尘，完整还原宋代官窑精细装烧流程。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_11.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>柿叶红釉划花牡丹纹碗</h4>
+                    <p>北宋晚期出土，碗内划刻牡丹纹样，线条流畅，红釉鲜亮，代表宋代民间高超装饰技艺。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_12.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋两彩盆</h4>
+                    <p>北宋晚期民间实用器皿，敞口形制、施绿彩釉，器型朴实，还原宋代百姓日常生活用瓷风貌。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_13.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋制瓷骨刷</h4>
+                    <p>北宋晚期出土兽骨制作工具，用于涂刷釉料，是古代手工制瓷工序的珍贵实物佐证。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_14.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋三彩炉</h4>
+                    <p>北宋晚期高柄三彩香炉，彩釉层次丰富，造型精巧，属于宋代厅堂焚香陈设器物。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_15.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋白釉瓷执壶</h4>
+                    <p>北宋晚期实用酒器，白釉素净温润，器型规整，反映宋代简约雅致的日用瓷审美。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_16.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>白釉“王”字铭梅瓶</h4>
+                    <p>北宋晚期储酒器物，瓶身刻有“王”字铭文，对研究宋代窑场使用者与归属具有重要参考价值。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_17.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>白釉瓜棱腹瓷杯</h4>
+                    <p>北宋中期花口瓜棱造型，器型精巧灵动，是宋代茶饮、酒饮小型精致日用瓷代表。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_18.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>青釉瓜棱腹瓷碗</h4>
+                    <p>北宋中期仿生瓜棱器型，青釉清雅柔和，充分体现宋代瓷器极简自然的设计美学。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_19.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代小型瓷器组</h4>
+                    <p>包含白釉小执壶、鸟食罐、黑白釉瓷瓶，品类丰富，展现金代窑场延续生产的繁荣面貌。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_20.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代三彩贴塑莲瓣纹案炉</h4>
+                    <p>金代厅堂陈设香炉，炉身贴塑莲瓣纹样，三彩艳丽饱满，是金代彩瓷工艺精品。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_21.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代青釉花口瓜棱碗</h4>
+                    <p>金代清凉寺遗址出土，花口瓜棱形制，釉色温润，见证汝窑遗址跨时代的制瓷延续性。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_22.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代黑釉凸线纹执壶</h4>
+                    <p>金代实用酒壶，器身凸线纹理立体，配原装器盖，是金代窑场独特装饰风格代表器物。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_23.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>金代青釉瓷狗俑</h4>
+                    <p>金代民间瓷塑玩具，造型简练质朴，生动还原当时百姓休闲把玩的生活场景。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_24.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋白釉刻划夜叉纹瓷枕</h4>
+                    <p>北宋中期稀有题材瓷枕，器面刻绘夜叉纹样，民俗色彩浓郁，是宋代纹饰研究珍贵标本。</p>
+                </div>
+            </div>
+            <div class="exhibit-item" data-cat="chip">
+                <img src="images/exhibit/cipian_biaoben_25.jpg" alt="展品">
+                <div class="exhibit-info">
+                    <span class="exhibit-tag tag-chip">瓷片标本</span>
+                    <h4>北宋青釉花瓣形器盖</h4>
+                    <p>北宋中期花瓣仿生器盖，做工精细、釉色通透，尽显宋代器物精致典雅的审美特征。</p>
+                </div>
+            </div>
+            <!--窑址遗存10个-->
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_01.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>清凉寺汝官窑遗址保护棚全景</h4>
+        <p>清凉寺汝官窑遗址原址保护展示大棚内部全景，大棚将宋代窑场遗址整体罩护，修建环形玻璃观光栈道，游客可俯视整片考古探方，直观看见宋代作坊、窑炉、灰坑等层层叠压的考古遗迹，是汝官窑遗址原址保护展示的重要场所。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_02.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>宋代窑场灰坑遗迹</h4>
+        <p>遗址内多处编号宋代灰坑，是当年官窑处理残次瓷器、废弃窑具的填埋坑。宋代汝官窑制度严苛，不合格的御用瓷器全部打碎就地填埋，这些灰坑出土大量汝瓷残片，是研究北宋汝官窑生产制度的关键实物遗迹。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_03.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>窑址瓷片堆积遗存</h4>
+        <p>探方内出土的汝瓷残件堆积，大量破碎的汝瓷残片集中埋藏于此，印证史书“唯供御拣退，方许出卖”的记载，落选御用器物直接打碎掩埋，大量标本为后世复原汝瓷工艺提供一手考古材料。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_04.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>Y5宋代汝官窑窑炉基址</h4>
+        <p>编号Y5的宋代汝官窑窑炉遗迹，是清凉寺遗址出土的真实烧造窑炉本体。窑炉由火膛、窑室构成，完整保留烧制瓷器的炉腔结构，直观展现北宋御用汝瓷的烧制空间，是研究汝窑烧成工艺的重要考古实物。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_05.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>北宋汝窑烧造场景复原模型</h4>
+        <p>依据考古发掘成果复原的宋代汝窑窑炉模型，还原古代窑炉烟囱、窑室结构。旁边摆放大量匣钵模拟古代装烧场景，直观还原宋代工匠装窑烧瓷的生产面貌。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_06.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>制瓷过滤池遗迹</h4>
+        <p>宋代作坊过滤池遗址，属于制瓷原料处理工序的专用设施。淘洗、过滤瓷土都在此处完成，是制备细腻汝瓷胎土的生产场所，见证汝瓷从原料处理到烧制完整工序链条。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_07.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>作坊陶缸坑遗迹</h4>
+        <p>作坊区内成组埋置的陶缸遗迹，这类陶缸多用于浸泡、淘洗瓷土，对瓷土进行沉淀提纯。多缸成套布局，说明北宋官窑拥有标准化、规模化的原料加工车间。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_08.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>澄泥池与灰坑组合遗迹</h4>
+        <p>作坊生产区域全景，画面可见澄泥池、多处宋代灰坑、作坊墙体基址。原料处理、瓷器烧制、残件填埋的遗迹集中分布，完整展现一整套宋代官窑制瓷生产空间格局。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_09.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>窑场多组考古遗迹探方</h4>
+        <p>整片窑场探方，陶瓮、窑炉、灰坑等遗迹交错分布，各个生产功能区相互毗邻。可以直观看到宋代官窑完整的厂区布局，体会皇家窑场庞大的生产规模。</p>
+    </div>
+</div>
+<div class="exhibit-item" data-cat="site">
+    <img src="images/exhibit/yaozhi_yicun_10.jpg" alt="窑址遗存">
+    <div class="exhibit-info">
+        <span class="exhibit-tag tag-site">窑址遗存</span>
+        <h4>宋代汝窑完整烧造复原场景</h4>
+        <p>多座窑炉组合复原场景，雕塑还原工匠投柴烧窑作业状态。复原完整复刻窑炉烟囱、窑门、燃烧室，生动复原北宋汝官窑热火朝天的烧造实景。</p>
+    </div>
+</div>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>三下乡社会实践｜平顶山宝丰县汝瓷非遗调研</p>
+</footer>
+
+<script>
+//图片点击放大弹窗
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+document.querySelectorAll('img').forEach(img=>{
+    img.onclick=function(){
+        lightbox.style.display='flex';
+        lightboxImg.src=this.src;
+    }
+})
+document.querySelector('.lightbox-close').onclick=function(){
+    lightbox.style.display='none';
+}
+lightbox.onclick=function(e){
+    if(e.target===lightbox) lightbox.style.display='none';
+}
+
+//分类筛选
+const btns = document.querySelectorAll('.filter-btn');
+const items = document.querySelectorAll('.exhibit-item');
+btns.forEach(btn=>{
+    btn.onclick=function(){
+        btns.forEach(b=>b.classList.remove('active'));
+        this.classList.add('active');
+        let filter = this.dataset.filter;
+        items.forEach(item=>{
+            if(filter==='all' || item.dataset.cat===filter){
+                item.style.display='block';
+            }else{
+                item.style.display='none';
+            }
+        })
+    }
+})
+</script>
+</body>
+</html>
